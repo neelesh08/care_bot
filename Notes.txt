@@ -1,0 +1,86 @@
+Free Rtos Notes
+
+developer docs
+https://www.freertos.org/features.html
+
+Introduction to RTOS Part 1 - What is a Real-Time Operating System (RTOS)? - https://youtu.be/F321087yYy4​
+
+Introduction to RTOS Part 2 - Getting Started with FreeRTOS - https://youtu.be/JIr7Xm_riRs​
+
+Introduction to RTOS Part 3 - Task Scheduling - https://youtu.be/95yUbClyf3E​
+
+Introduction to RTOS Part 4 - Memory Management - https://youtu.be/Qske3yZRW5I​
+
+Introduction to RTOS Part 5 - Queue - https://youtu.be/pHJ3lxOoWeI​
+
+Introduction to RTOS Part 6 - Mutex - https://youtu.be/I55auRpbiTs​
+
+Introduction to RTOS Part 7 - https://youtu.be/5JcMtbA9QEE​
+
+Introduction to RTOS Part 8 - https://youtu.be/b1f1Iex0Tso
+
+Introduction to RTOS Part 9 - https://youtu.be/qsflCf6ahXU
+
+Introduction to RTOS Part 10 - https://youtu.be/hRsWi4HIENc
+
+Introduction to RTOS Part 11 - https://youtu.be/C2xKhxROmhA
+
+Introduction to RTOS Part 12 - https://youtu.be/LPSHUcH5aQc	
+
+
+
+
+
+SMP (symmetric multicore processing)
+https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/freertos-smp.html
+
+TO make any changes related to stack size, priority
+
+// add this in setup 
+xTaskCreatePinnedToCore(  // Use xTaskCreate() in vanilla FreeRTOS
+              task1,  // Function to be called
+              "Toggle 1",   // Name of task
+              1024,         // Stack size (bytes in ESP32, words in FreeRTOS)
+              NULL,         // Parameter to pass to function
+              1,            // Task priority (0 to configMAX_PRIORITIES - 1)
+              NULL,         // Task handle
+              app_cpu);     // Run on one core for demo purposes (ESP32 only)
+
+// function for tast one
+void task1(void *parameters){
+
+  while(1){
+    digitalWrite(led_pin , HIGH);
+    vTaskDelay(rate_1/ portTICK_PERIOD_MS);
+    digitalWrite(led_pin , LOW);
+    vTaskDelay(rate_1 / portTICK_PERIOD_MS);
+    
+  }
+  
+}
+
+
+
+
+part-3 Task scheduling
+Tasks with higher priority are chosen to run before tasks with lower priority.
+ However, not all tasks need to be run. Only tasks in the “ready” or are already in the “running” state can be chosen to run next.
+ A task may put itself or another task in a “blocked” state by using one of the appropriate blocking functions, like vTaskDelay().
+ Tasks that are waiting for an external event, such as a free semaphore or a serial transmission, may also enter the blocked state. 
+The expiration of a timer or received resource may move a task from the “blocked” state to the “ready” state.
+
+Additionally, a task may put another task into the “suspended” state with the vTaskSuspend() function.
+ This prevents the suspended task from running until another task calls the vTaskResume() function on the suspended task.
+
+Note that tasks with equal priority are executed in a round-robin fashion.
+
+
+
+part 4-memory management
+
+
+https://www.freertos.org/a00111.html
+
+
+
+
