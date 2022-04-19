@@ -30,6 +30,16 @@ String result = "";
 String last1 = " ";
 
 
+void condition(int x1 , int x2 , int y1 , int y2 , String x , TS_Point p){
+  if(p.x > x1 && p.x < x2 && p.y >y1 && p.y < y2){
+    tft.print(x);
+    last1 = "1";
+    result += "1";
+  }
+}
+
+
+
 void onClicked(TS_Point p){
  
   tft.setCursor(20,30);
@@ -43,6 +53,7 @@ void onClicked(TS_Point p){
   if(p.x > 11 && p.x <46 && p.y > 69 && p.y < 105){
       tft.print("1");
       last1 = "1";
+      result += "1";
       
       
   }
@@ -50,66 +61,85 @@ void onClicked(TS_Point p){
   else if(p.x > 11 && p.x <46 && p.y > 124 && p.y <159 ){
       tft.print("4");
       last1 = "4";
+      result += "4";
+      
   }
 
   else if(p.x > 11 && p.x <46 && p.y > 179 && p.y <214){
       tft.println("7");
       last1 = "7";
+      result += "7";
   }
 
   else if(p.x > 61 && p.x <96 && p.y > 69 && p.y <105 ){
       tft.println("2");
       last1 = "2";
+      result += "2";
   }
 
   else if(p.x > 61 && p.x <96&& p.y > 124 && p.y <159 ){
       tft.println("5");
       last1 = "5";
+      result += "5";
   }
   else if(p.x > 61 && p.x <96 && p.y > 179 && p.y <214 ){
       tft.println("8");
       last1 = "8";
+      result += "8";
   }
 
   else if(p.x > 111 && p.x <146 && p.y > 69 && p.y <105 ){
       tft.println("3");
       last1 = "3";
+      result += "3";
   }
 
   else if(p.x > 111 && p.x <146 && p.y > 124 && p.y <159 ){
       tft.println("6");
       last1 = "6";
+      result += "6";
   }
 
   else if(p.x > 111 && p.x <146 && p.y > 179 && p.y <214 ){
       tft.println("9");
       last1 = "9";
+      result += "9";
   }
 
   else if(p.x > 161 && p.x <196 && p.y > 69 && p.y <105 ){
     tft.println("0");
     last1 = "0";
+    result += "0";
   }
   else if(p.x > 161 && p.x <196 && p.y > 124 && p.y <159 ){
       tft.println("+");
+      last1 = "+";
+      result += "+";
   }
   else if(p.x > 161 && p.x <196 && p.y > 179 && p.y <214 ){
+      
       tft.println("-");
       last1 = "-";
+      result += "-";
   }
 
   else if(p.x > 211 && p.x <246 && p.y > 69 && p.y <105 ){
       tft.println(".");
       last1 = ".";
+      result += ".";
   }
 
   else if(p.x > 211 && p.x <246 && p.y > 124 && p.y <159 ){
       tft.println("/");
+      last1 = "/";
+      result += "/";
+      
   }
 
   else if(p.x > 211 && p.x <246 && p.y > 179 && p.y <214 ){
       tft.println("*");
       last1 = "*";
+      result += "*";
   }
 
   else if(p.x > 267 && p.x <302 && p.y > 69 && p.y <105 ){
@@ -123,8 +153,9 @@ void onClicked(TS_Point p){
   }
 
   else if(p.x > 267 && p.x <302 && p.y > 179 && p.y <214 ){
-      tft.println("=");
+      tft.println(result);
       last1 = "=";
+      
   }
 
   
@@ -155,7 +186,8 @@ void drawIcon(){
 
   tft.drawRect(11,14,285,35,ILI9341_WHITE);
   tft.setFont(&FreeSans9pt7b);
-  
+
+  //  row 1
   tft.setCursor(23,88);
   tft.print("1");
 
@@ -168,11 +200,62 @@ void drawIcon(){
   tft.setCursor(172,88);
   tft.print("0");
 
-  tft.setCursor(227,88);
-  tft.print(".");
+  
+
 
   tft.setCursor(267,88);
   tft.print("CE");
+
+  // ROW 2
+
+  tft.setCursor(23,144);
+  tft.print("4");
+
+  tft.setCursor(73,144);
+  tft.print("5");
+
+  tft.setCursor(123,144);
+  tft.print("6");
+
+  tft.setCursor(172,144);
+  tft.print("7");
+
+  tft.setCursor(227,144);
+  tft.print("/");
+
+  tft.setCursor(267,144);
+  tft.print("CLR");
+
+  // ROW3 
+
+  tft.setCursor(23,199);
+  tft.print("7");
+
+  tft.setCursor(73,199);
+  tft.print("8");
+
+  tft.setCursor(123,199);
+  tft.print("9");
+
+  tft.setCursor(227,199);
+  tft.print("x");
+
+  tft.setCursor(267,199);
+  tft.print("=");
+
+  tft.setTextSize(2);
+  tft.setCursor(172,199);
+  tft.print("-");
+
+  
+
+  
+
+  tft.setCursor(227,88);
+  tft.print(".");
+
+
+    tft.setTextSize(1);
   
 
   tft.drawRect(11,69,icon_width,icon_height,ILI9341_WHITE);
