@@ -5,3 +5,8 @@ Mini project Resources
 
 Moisture sensor
 https://www.youtube.com/watch?v=pgGpuws7f9o
+
+
+co-existence of wifi and bluetooth:
+ 	------> https://stackoverflow.com/questions/65636417/making-esp32-wifi-bluetooth-work-together
+	------> https://github.com/espressif/esp-idf/blob/81ca1c01395f604972fbf141cfbe49764a746023/components/esp_wifi/src/phy_init.c#L168
