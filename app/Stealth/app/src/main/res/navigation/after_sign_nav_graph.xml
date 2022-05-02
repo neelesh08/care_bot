@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/after_sign_nav_graph"
+    app:startDestination="@id/activityFragment">
+    <fragment
+        android:id="@+id/activityFragment"
+        android:name="com.example.stealth.Health.healthMainFragment"
+        android:label="fragment_activity"
+        tools:layout="@layout/fragment_activity" />
+    <fragment
+        android:id="@+id/friendFragment"
+        android:name="com.example.stealth.Health.homeMainFragment"
+        android:label="fragment_friend"
+        tools:layout="@layout/fragment_home_main" />
+    <fragment
+        android:id="@+id/careBotFragment"
+        android:name="com.example.stealth.careBotFragment"
+        android:label="fragment_care_bot"
+        tools:layout="@layout/fragment_care_bot" />
+    <fragment
+        android:id="@+id/deviceFragment"
+        android:name="com.example.stealth.deviceFragment"
+        android:label="fragment_device"
+        tools:layout="@layout/fragment_device" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.stealth.profile.profileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileActivity"
+            app:destination="@id/editProfileActivity" />
+        <action
+            android:id="@+id/action_profileFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/editProfileActivity"
+        android:name="com.example.stealth.profile.editProfileActivity"
+        android:label="activity_edit_profile"
+        tools:layout="@layout/activity_edit_profile" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.stealth.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+</navigation>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sign_nav_graph"
+    app:startDestination="@id/logInFragment">
+
+    <fragment
+        android:id="@+id/logInFragment"
+        android:name="com.example.stealth.sign.LogInFragment"
+        android:label="fragment_log_in"
+        tools:layout="@layout/fragment_log_in" >
+        <action
+            android:id="@+id/action_logInFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+        <action
+            android:id="@+id/action_logInFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+        <action
+            android:id="@+id/action_logInFragment_to_walkThroughScreen"
+            app:destination="@id/walkThroughScreen" />
+        <action
+            android:id="@+id/action_logInFragment_to_afterSignActivity"
+            app:destination="@id/afterSignActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.example.stealth.sign.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_logInFragment"
+            app:destination="@id/logInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.example.stealth.sign.ForgotPasswordFragment"
+        android:label="fragment_forgot_password"
+        tools:layout="@layout/fragment_forgot_password" >
+        <action
+            android:id="@+id/action_forgotPasswordFragment_to_logInFragment"
+            app:destination="@id/logInFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/walkThroughScreen"
+        android:name="com.example.stealth.walkThroughScreen"
+        android:label="activity_walk_through_screen"
+        tools:layout="@layout/activity_walk_through_screen" />
+    <activity
+        android:id="@+id/afterSignActivity"
+        android:name="com.example.stealth.AfterSignActivity"
+        android:label="activity_after_sign"
+        tools:layout="@layout/activity_after_sign" />
+</navigation>

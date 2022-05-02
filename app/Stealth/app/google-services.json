@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "561336988969",
+    "project_id": "stealth-3c873",
+    "storage_bucket": "stealth-3c873.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561336988969:android:b745f12ddf703d2b6e3338",
+        "android_client_info": {
+          "package_name": "com.example.stealth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561336988969-gvgavgiocsrkp2srkjbogjep15pgvr8i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfjjhMGx_-qs_GYP2PkBs6kjq3cWPaLTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561336988969-gvgavgiocsrkp2srkjbogjep15pgvr8i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

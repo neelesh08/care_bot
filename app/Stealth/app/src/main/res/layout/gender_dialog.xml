@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/alert_dialog_shape">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gender"
+        android:textSize="22sp"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textAlignment="center"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/black" />
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/male"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/gender_selected"
+            android:padding="5dp"
+            android:text="Male"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:theme="@style/RadioStyle" />
+        <RadioButton
+            android:id="@+id/female"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/gender_selected"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:text="Female"
+
+            android:textSize="20dp"
+            android:theme="@style/RadioStyle" />
+
+        <RadioButton
+            android:id="@+id/preferNotToSay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/gender_selected"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:text="Prefer not to say"
+            android:textSize="20dp"
+            android:theme="@style/RadioStyle" />
+    </RadioGroup>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/black"
+        android:layout_marginBottom="1dp"/>
+    <Button
+        android:id="@+id/genderCancelButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        android:text="Cancel"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_weight="1"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        />
+
+</LinearLayout>

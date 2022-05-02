@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Stealth</string>
+    <string-array name="stepDropDownItems">
+        <item>Week</item>
+        <item>Month</item>
+        <item>All time</item>
+    </string-array>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
