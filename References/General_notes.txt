@@ -1,0 +1,8 @@
+
+
+SPI communication
+	------> https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html
+
+I2C communication
+	------> https://www.geeksforgeeks.org/i2c-communication-protocol
+
