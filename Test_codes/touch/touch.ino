@@ -1,4 +1,4 @@
-it /* this example demonstrates the usage of the TouchEvent library
+/* this example demonstrates the usage of the TouchEvent library
  *  it uses a 2.4 inch TFT display with resistive touch screen
  *  the display uses an ILI9341 controller
  *  and the touch screen a XPT2046
@@ -17,7 +17,7 @@ it /* this example demonstrates the usage of the TouchEvent library
 #include "TouchEvent.h"
 
 //used pins
-#define TFT_CS   5      //diplay chip select
+#define TFT_CS   15      //diplay chip select
 #define TFT_DC   2     //display d/c
 #define TFT_MOSI 23     //diplay MOSI
 #define TFT_CLK  18     //display clock
