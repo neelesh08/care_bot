@@ -5,8 +5,11 @@ void steps(){
     drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
 
     while(true){
-      GetPoint();
-      
+      if(isBackPressed()){
+        CurrentStatus = 1;
+        drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
+        return;
+      }
     }
 }
 
@@ -73,13 +76,12 @@ void temp(){
   drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
 
     while(true){
-      if(touch.touched()){
+      if(isBackPressed()){
         CurrentStatus = 1;
         drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
         return;
       }
     }
-  
 }
 
 
