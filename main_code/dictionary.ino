@@ -1,48 +1,48 @@
 
-void dictionary(){
-
-    drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
-    Dictionary dict_word;
-    String wordx;
-    while(true){
-
-        if(isBackPressed()){
-        CurrentStatus = 1;
-        drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
-        return;
-      }
-
-
-      if(p.x > 41 && p.x < 279 && p.y > 56 && p.y < 89){
-          wordx = wordCollector();
-          tft.setCursor(41,56 );
-          tft.print(wordx);
-          if(WiFi.status() == WL_CONNECTED){
-            HTTPClient http;
-            http.begin("https://api.dictionaryapi.dev/api/v2/entries/en/" + wordx);
-
-            int httpcode = http.GET();
-             if(httpcode > 0 && httpcode == HTTP_CODE_OK){
-
-              String payload = http.getString();
-              scrapDictionaryData(payload);
-
-              
-             }
-             else{
-                tft.println("Error found");
-             }
-             http.end();
-          }
-  
-          }
-          
-          
-      
-      
-    }
-  
-}
+//void dictionary(){
+//
+//    drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
+////    Dictionary dict_word;
+//    String wordx;
+//    while(true){
+//
+//        if(isBackPressed()){
+//        CurrentStatus = 1;
+//        drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
+//        return;
+//      }
+//
+//
+//      if(p.x > 41 && p.x < 279 && p.y > 56 && p.y < 89){
+//          wordx = wordCollector();
+//          tft.setCursor(41,56 );
+//          tft.print(wordx);
+//          if(WiFi.status() == WL_CONNECTED){
+//            HTTPClient http;
+//            http.begin("https://api.dictionaryapi.dev/api/v2/entries/en/" + wordx);
+//
+//            int httpcode = http.GET();
+//             if(httpcode > 0 && httpcode == HTTP_CODE_OK){
+//
+//              String payload = http.getString();
+//              scrapDictionaryData(payload);
+//
+//              
+//             }
+//             else{
+//                tft.println("Error found");
+//             }
+//             http.end();
+//          }
+//  
+//          }
+//          
+//          
+//      
+//      
+//    }
+//  
+//}
 
 
 String wordCollector(){
@@ -164,7 +164,7 @@ String wordCollector(){
       }
 
 
-      else if(p.x > 253 && p.x < 279 && p.y > 195 && 219){
+      else if(p.x > 253 && p.x < 279 && p.y > 195 && p.y < 219){
             // Serial.println(SearchWord);
             return SearchWord;
     }

@@ -21,27 +21,27 @@ void max_setup()
 
 //------------------------------------------------rtc setup-------------------------------------
 
-//void rtc_setup(){
-//
-//
-//
-//#ifndef ESP8266
-//  while (!Serial); // wait for serial port to connect. Needed for native USB
-//#endif
-//
-//  if (! rtc.begin()) {
-//    Serial.println("Couldn't find RTC");
-//    Serial.flush();
-//    abort();
-//  }
-//
-//  if (! rtc.isrunning()) {
-//    Serial.println("RTC is NOT running, let's set the time!");
-//   
-//    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-//
-//  }
-//}
+void rtc_setup(){
+
+
+
+#ifndef ESP8266
+  while (!Serial); // wait for serial port to connect. Needed for native USB
+#endif
+
+  if (! rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    Serial.flush();
+    abort();
+  }
+
+  if (! rtc.isrunning()) {
+    Serial.println("RTC is NOT running, let's set the time!");
+   
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+
+  }
+}
 
 
 

@@ -30,10 +30,10 @@ void heartRate(){
         return;
       }
       
-    if(p.x > 37 && p.x < 281 && p.y >193 && p.y <225 ){
+    if(p.x > 37 && p.x < 281 && p.y >193 && p.y < 225 ){
         
         while(runHeart){
-        bpm();
+          bpm();
           presentTime = millis();
       if(presentTime - startTime > 45000){
         runHeart = false;

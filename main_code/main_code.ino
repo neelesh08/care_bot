@@ -23,14 +23,14 @@ MAX30105 particleSensor; // max30105 object
 const char* ssid = "ASUS_X00TD";
 const char* password = "healsou1";
 // including rtc library
-//#include "RTClib.h"
-//RTC_DS1307 rtc;
+#include "RTClib.h"
+RTC_DS1307 rtc;
 //
 //bool Showtime = false;
 //String presentTime = "";
 
-#define TOUCH_CS 21      //touch screen chip select
-#define TOUCH_IRQ 22     //touch screen interrupt
+#define TOUCH_CS 13      //touch screen chip select
+#define TOUCH_IRQ 26     //touch screen interrupt
 
 
 const byte RATE_SIZE = 4; //Increase this for more averaging. 4 is good.
@@ -249,6 +249,7 @@ void setup(){
   
 //  xTaskCreatePinnedToCore( coreOneTask , "fucntion" , 100000 , NULL , 0,NULL , 0);
 //  delay(100);
+rtc_setup();
   drawSdJpeg(screen[0] , 0 , 0 ); 
   delay(100);
   
@@ -267,6 +268,8 @@ void setup(){
 void mainScreen(){
   drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
   while(true){
+
+      
       if(touch.touched() && !touch.bufferEmpty()){
             GetPoint();
           
@@ -324,8 +327,7 @@ void mainScreen(){
           }
 
           else if(p.x > 102 && p.x <151 && p.y >134 && p.y < 183){
-              CurrentStatus  = 11;
-              dictionary();
+//              CurrentStatus  = 11;              dictionary();
           }
 
 
