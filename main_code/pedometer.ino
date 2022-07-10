@@ -30,5 +30,5 @@ void pedometer_loop(){
 
   Serial.print("steps");
   Serial.println(step_s);
-  delay(500);
+  vTaskDelay( 500 / portTICK_PERIOD_MS);
 }

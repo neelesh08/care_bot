@@ -1,20 +1,25 @@
 
 
  
-void rtcTask(void *parameter){
-  rtc_setup();
+void twilio(void *parameter){
+//  rtc_setup();
 
   while(1){
 
 
         
-       if(ShowSteps)
-       pedometer_loop();
+//       if(ShowSteps)
+//       pedometer_loop();
 
-       if(ShowTimings)
-       printTime();
-
+//       if(ShowTimings)
+//       printTime();
+        //delay(5000);
+        vTaskDelay(1000/portTICK_PERIOD_MS);
        thing.Handle();
+       //delay(5000);
+        vTaskDelay(1000/portTICK_PERIOD_MS);
+
+       
        }
   }
 
@@ -46,9 +51,6 @@ void twilioStepUp(){
   thing.initDevice();
   
 }
-
-
-  
 
 void printTime(){
     now = rtc.now();

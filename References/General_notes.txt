@@ -6,3 +6,18 @@ SPI communication
 I2C communication
 	------> https://www.geeksforgeeks.org/i2c-communication-protocol
 
+
+
+Free font: 
+
+#define FF17 &FreeSans9pt7b
+#define FF18 &FreeSans12pt7b
+#define FF19 &FreeSans18pt7b
+#define FF20 &FreeSans24pt7b
+
+
+
+#define sFF17 "Sans 9"
+#define sFF18 "Sans 12"
+#define sFF19 "Sans 18"
+#define sFF20 "Sans 24"

@@ -8,6 +8,8 @@ ThingESP32 thing("user109", "ESP8266", "888555222");
 #include <TFT_eSPI.h>
 TFT_eSPI tft = TFT_eSPI(); // tft display object
 
+
+
 #include<WiFi.h>
 #include<HTTPClient.h>
 #include<ArduinoJson.h>
@@ -19,6 +21,7 @@ TFT_eSPI tft = TFT_eSPI(); // tft display object
 // including max sensor library
 #include "MAX30105.h"
 #include "heartRate.h"
+#include "spo2_algorithm.h"
 MAX30105 particleSensor; // max30105 object 
 //
 #include <Wire.h>
@@ -28,7 +31,7 @@ MAX30105 particleSensor; // max30105 object
 ADXL345 adxl; 
 
 // start time
-unsigned long startTime;
+unsigned long startTime = 0;
 unsigned long presentTime;
 
 const char* ssid = "ASUS_X00TD";
@@ -41,6 +44,8 @@ RTC_DS1307 rtc;
 #define TOUCH_CS 13      //touch screen chip select
 #define TOUCH_IRQ 26     //touch screen interrupt
 
+
+#define color 0x282828
 // boolean values for the working 
 bool ShowSteps = true;   
 bool ShowTimings = true;
@@ -49,16 +54,20 @@ bool ShowTimings = true;
 
 // time format
 
-
+// spo2 
+#define MAX_BRIGHTNESS 255
 
 //// variables for spo2 
-//uint32_t irBuffer[100]; //infrared LED sensor data
-//uint32_t redBuffer[100];  //red LED sensor data
-//int32_t bufferLength; //data length
-//int32_t spo2; //SPO2 value
-//int8_t validSPO2; //indicator to show if the SPO2 calculation is valid
-//int32_t heartRate; //heart rate value
-//int8_t validHeartRate; //indicator to show if the heart rate calculation is valid
+uint32_t irBuffer[100]; //infrared LED sensor data
+uint32_t redBuffer[100];  //red LED sensor data
+int32_t bufferLength; //data length
+int32_t spo2; //SPO2 value
+int8_t validSPO2; //indicator to show if the SPO2 calculation is valid
+int32_t heartRate; //heart rate value
+int8_t validHeartRate; //indicator to show if the heart rate calculation is valid
+
+byte pulseLED = 11; //Must be on PWM pin
+byte readLED = 13; //Blinks with each data read
 
 const byte RATE_SIZE = 4; //Increase this for more averaging. 4 is good.
 byte rates[RATE_SIZE]; //Array of heart rates
@@ -66,6 +75,10 @@ byte rateSpot = 0;
 long lastBeat = 0;
 float beatsPerMinute;
 int beatAvg;
+
+String heartrate;
+String spo2Modified;
+float temperature;
 
 // Creating object of class XPT2046_Touchscreen
 XPT2046_Touchscreen touch(TOUCH_CS, TOUCH_IRQ);
@@ -108,13 +121,18 @@ DateTime now;
 void setup(){
   touch.begin();
   sd_setup();
+
+  tft.fillScreen(TFT_BLACK);
+  tft.setCursor(100 , 100);
+  tft.print("Searching wifi");
+  
   twilioStepUp();
-  xTaskCreatePinnedToCore( rtcTask , "function" , 4092 , NULL , 0,NULL ,0);
-//  xTaskCreatePinnedToCore( twilio , "function1", 4092 , NULL , 0 ,NULL , 1);
+  xTaskCreatePinnedToCore( twilio , "function" , 4092 , NULL , 0,NULL ,0);
+   //xTaskCreatePinnedToCore( twilio , "function1", 4092 , NULL , 0 ,NULL , 1);
 //  delay(100);
   drawSdJpeg(screen[0] , 0 , 0 ); 
 //  rtc_setup();
-  adlx_setup();
+    adlx_setup();
   delay(100); //vTaskdelay(1000);
   
 }
@@ -143,12 +161,12 @@ void mainScreen(){
             }
             else if(p.x > 102 && p.x <151 && p.y >20 && p.y < 69){
               CurrentStatus = 3;
-              heartRate();
+              heartRateMeasure();
             }
 
             else if(p.x > 163 && p.x < 212 && p.y > 20 && p.y < 69){
               CurrentStatus =4;
-              spo2();
+//              spo2Measure();
             } 
 
             else if(p.x > 224 && p.x < 273 && p.y > 20 && p.y < 69){
@@ -222,10 +240,8 @@ void mainScreen(){
           else if(p.x > 197 && p.x < 275 && p.y > 202 && p.y <230){
             CurrentStatus = 14;
             drawSdJpeg(screen[CurrentStatus] , 0 , 0);
-            mainScreen1();
-            
-          }
-          
+            mainScreen1();    
+        }
     }
   }
 }
@@ -279,9 +295,10 @@ void loop(){   //esp32 two cpu0 and cpu1   loop() uses cpu1
 void initialScreen() {
 
     while(1){
-          tft.setCursor(100 , 100);
-          char buf[] = "hh:mm";
-          tft.print(now.toString(buf));
+ 
+//          tft.setCursor(100 , 100);
+//          char buf[] = "hh:mm";
+//          tft.print(now.toString(buf));
           if(touch.touched() && !touch.bufferEmpty()){
                 GetPoint();  
                 if(p.x > 140 && p.x < 180 && p.y > 167 && p.y < 207){
@@ -297,7 +314,7 @@ void GetPoint(){
    p = touch.getPoint();
    p.x = map(p.x , 256 ,3860, 0 ,320);
    p.y = map(p.y , 300 , 3760 , 0 ,240);
-   
+
 }
 
 
@@ -317,17 +334,16 @@ bool isStartPressed(){
     return 0;  
 }
 
+void  refreshScreen1(int x , int y , int w , int h){
+  tft.fillRect(x, y , w, h, color);
+}
 
-void refreshScreen(int cor_x , int cor_y , int len){
-  tft.setCursor(cor_x , cor_y);
-  String x = " ";
-//  for(int i=0 ; i<len ; i++){
-//    x += " ";
-//  }
-//  tft.
-//  tft.print(x);
-//  tft.fillRect(cor_x , cor_y ,
-    
+void refreshScreen(int cor_x , int cor_y ,  int len ){
+  
+    String temp = "";
+    for(int i=0; i<len ; i++){
+      temp += temp + " ";
+    }
   
 }
 
