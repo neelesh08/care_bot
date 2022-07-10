@@ -33,10 +33,13 @@ void settings(){
 
 void wifiStatus(){
   delay(100);
+//  CurrentStatus = 20;
+//  drawSdJpeg(screen[CurrentStatus] , 0 , 0);
 
+  
   WiFi.begin(ssid, password);
   tft.setCursor(32 , 104);
-  tft.setTextSize(2);
+  tft.setTextSize(3);
   tft.print("Wifi connecting");
    
   while(WiFi.status() != WL_CONNECTED){
@@ -49,9 +52,17 @@ void wifiStatus(){
         }
        
   }
-  refreshScreen(32 , 104 , 17);
+  
+  
+
+
+
   tft.setCursor(32 , 104);
   tft.print("wifi connected");
+
+  
+  CurrentStatus = 13 ; 
+  drawSdJpeg(screen[CurrentStatus] , 0 , 0);
   return ;
 
 }
@@ -110,11 +121,7 @@ void scrapWeatherData(String payload){
 void weather(){
   drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
   delay(1000);
-  CurrentStatus = 24;
-  drawSdJpeg(screen[CurrentStatus] , 0 , 0);
   wifiStatus();
-  CurrentStatus = 13 ; 
-  drawSdJpeg(screen[CurrentStatus] , 0 , 0);
 
   if(WiFi.status() == WL_CONNECTED){
     HTTPClient http;

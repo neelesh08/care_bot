@@ -4,7 +4,7 @@
 //    String Word;
 //    int sizeOfWord;
 //
-//    Dictionary(){
+//    dictionary(){
 //      Word = "";
 //      sizeOfWord = 0;
 //    }

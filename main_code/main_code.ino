@@ -1,8 +1,10 @@
 
-#include "dictionary.h"
+//#include "dictionary.h"
 #include <SPI.h>
 #include <FS.h>
 #include <SD.h>
+#include <ThingESP.h>
+ThingESP32 thing("user109", "ESP8266", "888555222");
 #include <TFT_eSPI.h>
 TFT_eSPI tft = TFT_eSPI(); // tft display object
 
@@ -18,20 +20,45 @@ TFT_eSPI tft = TFT_eSPI(); // tft display object
 #include "MAX30105.h"
 #include "heartRate.h"
 MAX30105 particleSensor; // max30105 object 
+//
+#include <Wire.h>
+#include <ADXL345.h>
 
+
+ADXL345 adxl; 
+
+// start time
+unsigned long startTime;
+unsigned long presentTime;
 
 const char* ssid = "ASUS_X00TD";
 const char* password = "healsou1";
 // including rtc library
 #include "RTClib.h"
 RTC_DS1307 rtc;
-//
-//bool Showtime = false;
-//String presentTime = "";
+
 
 #define TOUCH_CS 13      //touch screen chip select
 #define TOUCH_IRQ 26     //touch screen interrupt
 
+// boolean values for the working 
+bool ShowSteps = true;   
+bool ShowTimings = true;
+
+// twilio 
+
+// time format
+
+
+
+//// variables for spo2 
+//uint32_t irBuffer[100]; //infrared LED sensor data
+//uint32_t redBuffer[100];  //red LED sensor data
+//int32_t bufferLength; //data length
+//int32_t spo2; //SPO2 value
+//int8_t validSPO2; //indicator to show if the SPO2 calculation is valid
+//int32_t heartRate; //heart rate value
+//int8_t validHeartRate; //indicator to show if the heart rate calculation is valid
 
 const byte RATE_SIZE = 4; //Increase this for more averaging. 4 is good.
 byte rates[RATE_SIZE]; //Array of heart rates
@@ -52,9 +79,15 @@ const char* screen[] = { "/new_ui/main_screen.jpg" ,
                          "/new_ui/temp.jpg" , "/new_ui/fill.jpg" , "/new_ui/music.jpg" , "/new_ui/camera_shutter.jpg" , 
                          "/new_ui/games/jpg" , "/new_ui/media.jpg" , "/new_ui/energy_saver.jpg" , "/new_ui/energy_saver.jpg" , 
                          "/new_ui/deep_sleep.jpg" ,
-                         "/new_ui/wifi_connecting.jpg" , "/new_ui/keyboard.jpg" 
+                         "/new_ui/wifi_connecting.jpg"
                       
-                         }; 
+                     }; 
+
+
+int step_s =0 ;
+float distance = 0;
+int calories = 0;
+float prevAcl = 0 , newAcl = 0;
 
 int CurrentStatus = 0;
 
@@ -66,192 +99,23 @@ TS_Point p_old;
 
 int pos = 0;
 
+DateTime now;
 
-// calculator 
-const int LEN = 20;
 
-// Size of the stack
-const int MAX = 40;
-
-class Stack {
-private:
-  // Stack: array of characters
-  char st[MAX];
-
-  // Number at top of the stack
-  int top;
-
-public:
-  Stack()
-  {
-    top = 0;
-  }
-
-  // Function to put a character in stack
-  void push(char var)
-  {
-    st[++top] = var;
-  }
-
-  // Function to return a character off stack
-  char pop()
-  {
-    return st[top--];
-  }
-
-  // Function to get the top of the stack
-  int gettop()
-  {
-    return top;
-  }
-};
-
-// Expression class
-class Express {
-private:
-  // Stack for analysis
-  Stack s;
-
-  // Pointer to input string
-  char* pStr;
-
-  // Length of the input string
-  int len;
-
-public:
-  Express(char* ptr)
-  {
-    pStr = ptr;
-    len = strlen(pStr);
-  }
-
-  // Parse the input string
-  void parse();
-
-  // Evaluate the stack
-  int solve();
-};
-
-void Express::parse()
-{
-
-  // Character from the input string
-  char ch;
-
-  // Last value
-  char lastval;
-
-  // Last operator
-  char lastop;
-
-  // For each input character
-  for (int j = 0; j < len; j++) {
-    ch = pStr[j];
-
-    // If it's a digit then save
-    // the numerical value
-    if (ch >= '0' && ch <= '9')
-      s.push(ch - '0');
-
-    // If it's an operator
-    else if (ch == '+' || ch == '-'
-        || ch == '*' || ch == '/') {
-
-      // If it is the first operator
-      // then put it in the stack
-      if (s.gettop() == 1)
-
-        s.push(ch);
-
-      // Not the first operator
-      else {
-        lastval = s.pop();
-        lastop = s.pop();
-
-        // If it is either '*' or '/' and the
-        // last operator was either '+' or '-'
-        if ((ch == '*' || ch == '/')
-          && (lastop == '+' || lastop == '-')) {
-
-          // Restore the last two pops
-          s.push(lastop);
-          s.push(lastval);
-        }
-
-        // In all the other cases
-        else {
-
-          // Perform the last operation
-          switch (lastop) {
-
-          // Push the result in the stack
-          case '+':
-            s.push(s.pop() + lastval);
-            break;
-          case '-':
-            s.push(s.pop() - lastval);
-            break;
-          case '*':
-            s.push(s.pop() * lastval);
-            break;
-          case '/':
-            s.push(s.pop() / lastval);
-            break;
-          default:
-            Serial.println("\nUnknown oper");
-            exit(1);
-          }
-        }
-        s.push(ch);
-      }
-    }
-    else {
-      Serial.println("\nUnknown input character");
-      exit(1);
-    }
-  }
-}
-
-int Express::solve()
-{
-  // Remove the items from stack
-  char lastval;
-  while (s.gettop() > 1) {
-    lastval = s.pop();
-    switch (s.pop()) {
-
-    // Perform operation, push answer
-    case '+':
-      s.push(s.pop() + lastval);
-      break;
-    case '-':
-      s.push(s.pop() - lastval);
-      break;
-    case '*':
-      s.push(s.pop() * lastval);
-      break;
-    case '/':
-      s.push(s.pop() / lastval);
-      break;
-    default:
-      Serial.println("\nUnknown operator");
-      exit(1);
-    }
-  }
-  return int(s.pop());
-}
 
 
 // --------------------- setup ------------------------
 void setup(){
   touch.begin();
   sd_setup();
-  
-//  xTaskCreatePinnedToCore( coreOneTask , "fucntion" , 100000 , NULL , 0,NULL , 0);
+  twilioStepUp();
+  xTaskCreatePinnedToCore( rtcTask , "function" , 4092 , NULL , 0,NULL ,0);
+//  xTaskCreatePinnedToCore( twilio , "function1", 4092 , NULL , 0 ,NULL , 1);
 //  delay(100);
-rtc_setup();
   drawSdJpeg(screen[0] , 0 , 0 ); 
-  delay(100);
+//  rtc_setup();
+  adlx_setup();
+  delay(100); //vTaskdelay(1000);
   
 }
 
@@ -268,8 +132,6 @@ rtc_setup();
 void mainScreen(){
   drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
   while(true){
-
-      
       if(touch.touched() && !touch.bufferEmpty()){
             GetPoint();
           
@@ -327,7 +189,8 @@ void mainScreen(){
           }
 
           else if(p.x > 102 && p.x <151 && p.y >134 && p.y < 183){
-//              CurrentStatus  = 11;              dictionary();
+              CurrentStatus  = 11;
+              //dictionary();
           }
 
 
@@ -406,15 +269,8 @@ void mainScreen1(){
 }
 
 
-//void printTime(int x , int y){
-//    DateTime now = rtc.now();
-//   char buf[] = "hh:mm";
-//   tft.setCursor(x, y);
-//   tft.setTextSize(3);
-//   tft.println(now.toString(buf));
-//   delay(100);
-//}
-void loop(){
+
+void loop(){   //esp32 two cpu0 and cpu1   loop() uses cpu1
   initialScreen();
 }
 
@@ -423,7 +279,9 @@ void loop(){
 void initialScreen() {
 
     while(1){
-      
+          tft.setCursor(100 , 100);
+          char buf[] = "hh:mm";
+          tft.print(now.toString(buf));
           if(touch.touched() && !touch.bufferEmpty()){
                 GetPoint();  
                 if(p.x > 140 && p.x < 180 && p.y > 167 && p.y < 207){
@@ -463,10 +321,13 @@ bool isStartPressed(){
 void refreshScreen(int cor_x , int cor_y , int len){
   tft.setCursor(cor_x , cor_y);
   String x = " ";
-  for(int i=0 ; i<len ; i++){
-    x += " ";
-  }
-  tft.print(x);
+//  for(int i=0 ; i<len ; i++){
+//    x += " ";
+//  }
+//  tft.
+//  tft.print(x);
+//  tft.fillRect(cor_x , cor_y ,
+    
   
 }
 

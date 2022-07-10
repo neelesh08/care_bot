@@ -1,16 +1,61 @@
 
 
  
-//void coreOneTask(void *parameter){
-//  rtc_setup();
-//
-//  while(1){
-//       if(Showtime){
-//       DateTime now = rtc.now();
-//       char buf[] = "hh:mm";
-//       presentTime = now.toString(buf);
-//       
-//       }
-//  }
-//  
-//}
+void rtcTask(void *parameter){
+  rtc_setup();
+
+  while(1){
+
+
+        
+       if(ShowSteps)
+       pedometer_loop();
+
+       if(ShowTimings)
+       printTime();
+
+       thing.Handle();
+       }
+  }
+
+
+String HandleResponse(String query)
+{
+
+  if (query == "hi") {
+
+    return "hi macha";
+  }
+
+  else if (query == "dude") {
+   
+    return "hemanth boss here";
+  }
+
+  else if (query == "who is hemanth's girlfriend")
+    return "Her name starts with letter K and ends with a";
+
+
+  else return "Hemanth is boss, idc";
+
+}
+
+void twilioStepUp(){
+  
+  thing.SetWiFi("ASUS_X00TD", "healsou1");
+  thing.initDevice();
+  
+}
+
+
+  
+
+void printTime(){
+    now = rtc.now();
+    char buf[] = "hh:mm";
+//   tft.setCursor(x, y);
+//   tft.setTextSize(3);
+    Serial.println(now.toString(buf));
+//   tft.println(now.toString(buf));
+   delay(100);
+}
