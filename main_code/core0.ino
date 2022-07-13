@@ -27,21 +27,35 @@ void twilio(void *parameter){
 String HandleResponse(String query)
 {
 
-  if (query == "hi") {
-
-    return "hi macha";
+  if (query == "send heartrate") {
+    String hr = String(beatAvg);
+    return hr;
   }
 
-  else if (query == "dude") {
-   
-    return "hemanth boss here";
+  else if(query == "send spo2") {
+    String sp = String(spo2);
+    return sp;
   }
 
-  else if (query == "who is hemanth's girlfriend")
-    return "Her name starts with letter K and ends with a";
+  
+
+  else if(query == "send health report"){
+    String t = "heart rate" + String(beatAvg) + "\n" + "Spo2 value:" + String(spo2) + "\n";
+    return t;
+  }
+
+  
+
+//  else if (query == "dude") {
+//   
+//    return "hemanth boss here";
+//  }
+
+//  else if (query == "who is hemanth's girlfriend")
+//    return "Her name starts with letter K and ends with a";
 
 
-  else return "Hemanth is boss, idc";
+  else return "invalid request";
 
 }
 
@@ -53,11 +67,15 @@ void twilioStepUp(){
 }
 
 void printTime(){
+   
     now = rtc.now();
     char buf[] = "hh:mm";
-//   tft.setCursor(x, y);
-//   tft.setTextSize(3);
-    Serial.println(now.toString(buf));
-//   tft.println(now.toString(buf));
-   delay(100);
+    tft.setCursor(0,0);
+    tft.setTextColor(TFT_WHITE , TFT_BLACK);
+    tft.setTextSize(1);
+    //Serial.println(now.toString(buf));
+    for(int i = 0; i <5 ;i++ ){ tft.println(String(buf[i]));}
+    
+    vTaskDelay(3000/portTICK_PERIOD_MS);
+    //delay(100);
 }

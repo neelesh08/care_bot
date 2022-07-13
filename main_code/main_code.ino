@@ -1,5 +1,5 @@
 
-//#include "dictionary.h"
+
 
 #include <SPI.h>
 #include <FS.h>
@@ -20,6 +20,10 @@ TFT_eSPI tft = TFT_eSPI(); // tft display object
 #include <JPEGDecoder.h>
 #include <XPT2046_Touchscreen.h>
 #include "TouchEvent.h"
+
+
+// including font library
+#include "Free_Fonts.h" 
 
 // including max sensor library
 #include "MAX30105.h"
@@ -56,6 +60,15 @@ bool ShowTimings = true;
 // twilio 
 
 // time format
+
+// font 
+#define FF17 &FreeSans9pt7b
+#define FF18 &FreeSans12pt7b
+#define FF19 &FreeSans18pt7b
+#define FF20 &FreeSans24pt7b
+
+
+
 
 // spo2 
 #define MAX_BRIGHTNESS 255
@@ -128,7 +141,7 @@ void setup(){
   tft.fillScreen(TFT_BLACK);
   tft.setCursor(100 , 100);
   tft.print("Searching wifi");
-  
+  tft.setFreeFont(FF17); // font setting 
   twilioStepUp();
   xTaskCreatePinnedToCore( twilio , "function" , 4092 , NULL , 0,NULL ,0);
    //xTaskCreatePinnedToCore( twilio , "function1", 4092 , NULL , 0 ,NULL , 1);
@@ -205,7 +218,7 @@ void mainScreen(){
 
           else if(p.x > 41 && p.x < 90 && p.y > 134 && p.y < 183){
               CurrentStatus =10 ;
-              stocks();
+              //stocks();
               
           }
 
@@ -256,12 +269,6 @@ void mainScreen1(){
   while(true){
       if(touch.touched() && !touch.bufferEmpty()){
             GetPoint();
-          
-          
-
-         
-            
-          
           // up arrow , home  , down arrow navigation
            if(p.x > 41 && p.x < 119 && p.y > 202 && p.y < 230){
               CurrentStatus = 1;
@@ -298,6 +305,9 @@ void loop(){   //esp32 two cpu0 and cpu1   loop() uses cpu1
 void initialScreen() {
 
     while(1){
+      
+      //printTime();
+      
  
 //          tft.setCursor(100 , 100);
 //          char buf[] = "hh:mm";
@@ -309,6 +319,10 @@ void initialScreen() {
                 mainScreen();   
             }
         }
+//       now = rtc.now();
+//       tft.setCursor(100 , 100);
+//       tft.setTextColor(TFT_WHITE , TFT_BLACK);
+//       tft.print(now.year());
     }       
 }
 
@@ -365,5 +379,35 @@ void refreshScreen(int cor_x , int cor_y ,  int len ){
     tft.setCursor(cor_x , cor_y);
     tft.setTextColor(TFT_WHITE , TFT_BLACK);
     tft.print(temp);
+  
+}
+
+
+void tftPrint(int i , int x_cor , int y_cor , String text ){
+      switch(i){
+        case 0: 
+              tft.setFreeFont(FF17); 
+              break;
+              
+        case 1:
+              tft.setFreeFont(FF18); 
+              break;
+              
+        case 2:
+              tft.setFreeFont(FF19); 
+              break;  
+              
+        case 3:
+              tft.setFreeFont(FF20); 
+              break;
+
+
+       default:
+            tft.setFreeFont(FF17); 
+        
+      }
+
+       tft.drawString(text, 160, 120, GFXFF);
+
   
 }

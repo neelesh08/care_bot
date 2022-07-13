@@ -121,7 +121,7 @@ void scrapWeatherData(String payload){
 void weather(){
   drawSdJpeg(screen[CurrentStatus] , 0 , 0 );
   delay(1000);
-  wifiStatus();
+  //wifiStatus();
 
   if(WiFi.status() == WL_CONNECTED){
     HTTPClient http;
