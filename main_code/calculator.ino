@@ -129,6 +129,7 @@ void calculator(){
       }
 
       refreshScreen(30,41, 22);
+//      tftPrint( 1 , 30  , 41  , expression , 22 );
       tft.setTextSize(1);
       tft.setTextColor(TFT_WHITE , TFT_BLACK);
       tft.setCursor(30,41);

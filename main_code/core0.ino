@@ -60,8 +60,8 @@ String HandleResponse(String query)
 }
 
 void twilioStepUp(){
-  
-  thing.SetWiFi("ASUS_X00TD", "healsou1");
+  thing.SetWiFi("narzo", "UZUMAKI51");
+//  thing.SetWiFi("ASUS_X00TD", "healsou1");
   thing.initDevice();
   
 }

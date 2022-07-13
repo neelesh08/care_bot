@@ -141,7 +141,7 @@ void setup(){
   tft.fillScreen(TFT_BLACK);
   tft.setCursor(100 , 100);
   tft.print("Searching wifi");
-  tft.setFreeFont(FF17); // font setting 
+//  tft.setFreeFont(FF17); // font setting 
   twilioStepUp();
   xTaskCreatePinnedToCore( twilio , "function" , 4092 , NULL , 0,NULL ,0);
    //xTaskCreatePinnedToCore( twilio , "function1", 4092 , NULL , 0 ,NULL , 1);
@@ -383,7 +383,7 @@ void refreshScreen(int cor_x , int cor_y ,  int len ){
 }
 
 
-void tftPrint(int i , int x_cor , int y_cor , String text ){
+void tftPrint(int i , int x_cor , int y_cor , String text , int len ){
       switch(i){
         case 0: 
               tft.setFreeFont(FF17); 
@@ -403,11 +403,13 @@ void tftPrint(int i , int x_cor , int y_cor , String text ){
 
 
        default:
+            
             tft.setFreeFont(FF17); 
         
       }
-
-       tft.drawString(text, 160, 120, GFXFF);
+        
+       tft.setTextColor(TFT_WHITE, TFT_BLACK);
+       tft.drawString(text, x_cor, y_cor , GFXFF);
 
   
 }
